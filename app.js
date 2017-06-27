@@ -1,4 +1,7 @@
 var TwitterPackage = require('twitter');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://localhost/test');
 
 var secret = {
   consumer_key: 'gVHf3LcfleMvGCFVb1YGRoOsB',
@@ -8,10 +11,21 @@ var secret = {
 }
 
 var Twitter = new TwitterPackage(secret);
+var Post = mongoose.model('Post', { text: String });
 
 Twitter.stream('statuses/filter', {track: 'Câmara'}, function(stream) {
   stream.on('data', function(tweet) {
     console.log(tweet.text);
+
+    var ultimoPost = new Post({ text: tweet.text });
+
+    ultimoPost.save(function (err) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Post salvo no banco.");
+      }
+    });
   });
 
   stream.on('error', function(error) {
