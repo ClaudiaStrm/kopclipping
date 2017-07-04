@@ -1,7 +1,7 @@
 var TwitterPackage = require('twitter');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://user8:123456@ds139942.mlab.com:39942/kopteste');
 
 var secret = {
   consumer_key: 'gVHf3LcfleMvGCFVb1YGRoOsB',
@@ -11,13 +11,34 @@ var secret = {
 }
 
 var Twitter = new TwitterPackage(secret);
-var Post = mongoose.model('Post', { text: String });
+var Post = mongoose.model(
+  'Post', { 
+    created_at: String, 
+    text: String, 
+    user: {
+      name: String,
+      screen_name: String  
+    },
+    entities: {
+      user_mentions: [{
+        screen_name: String,        
+      }]
+    }
+  });
 
-Twitter.stream('statuses/filter', {track: 'Câmara'}, function(stream) {
+Twitter.stream('statuses/filter', {track: 'skybrasil'}, function(stream) {
   stream.on('data', function(tweet) {
-    console.log(tweet.text);
+    console.log("Nome: ", tweet.user.screen_name, "\n",tweet.text, "\nData:", 
+      tweet.created_at, "\n Mencionado: ", tweet.entities.user_mentions,screen_name[0]);
 
-    var ultimoPost = new Post({ text: tweet.text });
+    var ultimoPost = new Post(
+      { 
+        username: tweet.user.screen_name,
+        created_at: tweet.created_at, 
+        text: tweet.text,
+        user: tweet.user.screen_name,
+        mention: tweet.entities.user_mentions.screen_name
+    });
 
     ultimoPost.save(function (err) {
       if (err) {

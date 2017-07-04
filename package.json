@@ -4,7 +4,8 @@
   "description": "Bot to find tweets and save companies reputation",
   "main": "app.js",
   "dependencies": {
-    "twitter": "^1.7.1"
+    "twitter": "^1.7.1",
+    "mongoose": "4.10.8"
   },
   "devDependencies": {},
   "scripts": {
