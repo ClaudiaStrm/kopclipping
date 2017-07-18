@@ -26,10 +26,10 @@ var Post = mongoose.model(
     }
   });
 
-Twitter.stream('statuses/filter', {track: 'skybrasil'}, function(stream) {
+Twitter.stream('statuses/filter', {track: 'Câmara'}, function(stream) {
   stream.on('data', function(tweet) {
     console.log("Nome: ", tweet.user.screen_name, "\n",tweet.text, "\nData:", 
-      tweet.created_at, "\n Mencionado: ", tweet.entities.user_mentions,screen_name[0]);
+      tweet.created_at, "\n Mencionado: ", tweet.entities.user_mentions);
 
     var ultimoPost = new Post(
       { 
@@ -37,7 +37,7 @@ Twitter.stream('statuses/filter', {track: 'skybrasil'}, function(stream) {
         created_at: tweet.created_at, 
         text: tweet.text,
         user: tweet.user.screen_name,
-        mention: tweet.entities.user_mentions.screen_name
+        mention: tweet.entities.user_mentions
     });
 
     ultimoPost.save(function (err) {
